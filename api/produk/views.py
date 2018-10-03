@@ -1,8 +1,15 @@
 from rest_framework import generics
 from produk.models import Produk
 from api.produk.serializers import ProdukSerializer
+from api.permissions import IsAdminOrReadOnly
 
 
-class ProdukList(generics.ListAPIView):
+class ProdukList(generics.ListCreateAPIView):
     queryset = Produk.objects.all()
     serializer_class = ProdukSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+
+class ProdukDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Produk.objects.all()
+    serializer_class = ProdukSerializer
+    permission_classes = (IsAdminOrReadOnly,)

@@ -1,6 +1,7 @@
-from django.conf.urls import url
-from api.produk.views import ProdukList
+from django.urls import path, re_path
+from api.produk.views import ProdukList, ProdukDetail
 
 urlpatterns = [
-	url(r'^', ProdukList.as_view(), name='produk-list')
+	path('', ProdukList.as_view(), name='produk-list'),
+	re_path(r'^(?P<pk>[0-9]+)/$', ProdukDetail.as_view(), name='produk-detail'),
 ]
