@@ -1,13 +1,25 @@
 from django.contrib import admin
-from .models import Kategori, Produk
+from .models import Kategori, Produk, Order, OrderBarang
 # Register your models here.
 
+class ProdukInline(admin.TabularInline):
+	model = Produk
+
 class KategoriAdmin(admin.ModelAdmin):
-	list_display = ('nama',)
+	inline = [
+		ProdukInline,
+	]
 
 
-class ProdukAdmin(admin.ModelAdmin):
-	list_display = ('nama','merk','harga','qty',)
+class OrderBarangInline(admin.TabularInline):
+	model = OrderBarang
+
+class OrderAdmin(admin.ModelAdmin):
+	inlines = [
+		OrderBarangInline,
+	]
+
 
 admin.site.register(Kategori,KategoriAdmin)
-admin.site.register(Produk,ProdukAdmin)
+admin.site.register(Produk)
+admin.site.register(Order, OrderAdmin)

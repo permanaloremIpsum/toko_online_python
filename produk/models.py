@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 class Kategori(models.Model):
@@ -24,3 +25,40 @@ class Produk(models.Model):
 
 	def __str__(self):
 		return self.nama
+
+class Order(models.Model):
+	user = models.ForeignKey(
+		settings.AUTH_USER_MODEL,
+		on_delete=models.SET_NULL,
+		null=True)
+	no_hp = models.CharField(max_length=15, null=True)
+	alamat = models.TextField()
+	ongkir = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+	catatan = models.TextField(null=True, blank=True)
+	date = models.DateTimeField(auto_now_add=True)
+	status = models.CharField(
+		choices=(
+			('checkout', 'Checkout'),
+			('paid', 'Terbayar'),
+			('delivered', 'Terkirim'),
+		),
+		default='checkout',
+		max_length=10,
+	)
+	totalbelanja = models.DecimalField(
+		max_digits=15, decimal_places=2, default=0)
+
+	class Meta:
+		verbose_name_plural = "Order"
+
+	def __str__(self):
+		return str(self.pk)
+
+class OrderBarang(models.Model):
+	order = models.ForeignKey('Order', on_delete=models.CASCADE)
+	produk = models.ForeignKey('Produk', on_delete=models.CASCADE)
+	harga = models.DecimalField(
+		max_digits=15, decimal_places=2, default=0)
+	qty = models.IntegerField(default=1)
+	totalhargabarang = models.DecimalField(
+		max_digits=15, decimal_places=2, default=0)
