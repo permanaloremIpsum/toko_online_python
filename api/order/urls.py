@@ -1,7 +1,12 @@
 from django.urls import path, re_path
-from api.order.views import OrderList
+from api.order.views import (
+	OrderList, OrderDetail, OrderBarangList, OrderBarangDetail
+)
 
 urlpatterns = [
 	path('', OrderList.as_view(), name='order-list'),
-	# re_path(r'^(?P<pk>[0-9]+)/$', OrderDetail.as_view(), name='order-detail'),
+	path('<pk>', OrderDetail.as_view(), name='order-detail'),
+    path('<pk>/barang/', OrderBarangList.as_view(), name='order-barang-list'),
+    path('<pk>/barang/<barangid>/', 
+    	OrderBarangDetail.as_view(), name='order-barang-detail'),
 ]
